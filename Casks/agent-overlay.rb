@@ -1,11 +1,19 @@
 cask "agent-overlay" do
   version "1.0.0"
-  sha256 "cdb8ac4d3b1bb001811f23a78af17aa7b649c3965219a8d36d4c45b02b5366e0"
+  sha256 "59c2bb4e2f995818f5c8ce72c4b69eb62538270afa0db58f09af30dfc3794af2"
 
-  url "https://github.com/RayyanDarugar/attentionexchange/releases/download/v#{version}/agent-overlay-#{version}-arm64.dmg"
+  # The PUBLIC releases repo, not the private source repo. Homebrew downloads
+  # anonymously, so a private repo's release asset returns 404 for everyone
+  # except the account that owns it — the cask would work only on the machine
+  # that published it.
+  #
+  # The tag is prefixed because that repo already holds v1.0.0 for the previous
+  # product (Attention Instrument). Two products, one release repo, so the tag
+  # has to say which.
+  url "https://github.com/RayyanDarugar/attentionexchange-releases/releases/download/agent-overlay-v#{version}/agent-overlay-#{version}-arm64.dmg"
   name "agent-overlay"
   desc "Shows what your Claude Code sessions are doing, in blank space on screen"
-  homepage "https://github.com/RayyanDarugar/attentionexchange"
+  homepage "https://github.com/RayyanDarugar/attentionexchange-releases"
 
   # Apple Silicon only: the build is arm64, and the Swift helpers that read
   # window geometry are compiled for it. An Intel Mac fails at launch in a way
@@ -27,14 +35,14 @@ cask "agent-overlay" do
   ]
 
   caveats <<~EOS
-    agent-overlay is not notarised by Apple, so macOS will refuse to open it
-    unless you installed with --no-quarantine:
-
-      brew install --cask --no-quarantine rayyandarugar/tap/agent-overlay
-
-    If you already installed without that flag, either reinstall with it or run:
+    One more step, because agent-overlay is not notarised by Apple:
 
       xattr -dr com.apple.quarantine "/Applications/agent-overlay.app"
+
+    Without it macOS reports the app as "damaged", which is untrue and is the
+    same message a genuinely corrupt download gives. Homebrew used to offer
+    --no-quarantine for exactly this; it was removed, and there is no
+    replacement flag, so the step has to be run by hand.
 
     On first launch it asks for Screen Recording. Nothing is recorded — it is
     the only macOS permission for "what does this region of the screen look
