@@ -1,5 +1,9 @@
 cask "agent-overlay" do
   version "1.0.0"
+  # Taken from the PUBLISHED asset, not from a local build. Electron output is
+  # not byte-reproducible, so every `npm run dist` yields a different hash and
+  # only the uploaded file's is meaningful:
+  #   curl -sL <url> | shasum -a 256
   sha256 "cdb8ac4d3b1bb001811f23a78af17aa7b649c3965219a8d36d4c45b02b5366e0"
 
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
@@ -20,7 +24,14 @@ cask "agent-overlay" do
   # a non-technical person cannot describe back to you, so it is refused here
   # with an explanation instead.
   depends_on arch: :arm64
-  depends_on macos: ">= :sonoma"
+  # The bare symbol already means "or newer" — the DSL parses it with a ">="
+  # comparator by default, which is why the string form is both redundant and
+  # deprecated.
+  #
+  # Ventura rather than Sonoma: the real floor is ScreenCaptureKit, which needs
+  # 12.3, and Sonoma was an arbitrary guess that would refuse machines the app
+  # runs on perfectly well.
+  depends_on macos: :ventura
 
   app "agent-overlay.app"
 
