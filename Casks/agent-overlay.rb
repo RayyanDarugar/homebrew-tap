@@ -1,6 +1,6 @@
 cask "agent-overlay" do
   version "1.0.0"
-  sha256 "59c2bb4e2f995818f5c8ce72c4b69eb62538270afa0db58f09af30dfc3794af2"
+  sha256 "cdb8ac4d3b1bb001811f23a78af17aa7b649c3965219a8d36d4c45b02b5366e0"
 
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
   # anonymously, so a private repo's release asset returns 404 for everyone
