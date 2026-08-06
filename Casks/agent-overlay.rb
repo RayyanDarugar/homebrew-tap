@@ -1,5 +1,5 @@
 cask "agent-overlay" do
-  version "1.0.1"
+  version "1.0.2"
   # Taken from the PUBLISHED asset, not from a local build. Electron output is
   # not byte-reproducible, so every `npm run dist` yields a different hash and
   # only the uploaded file's is meaningful:
