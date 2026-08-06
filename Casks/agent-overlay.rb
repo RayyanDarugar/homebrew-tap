@@ -4,7 +4,7 @@ cask "agent-overlay" do
   # not byte-reproducible, so every `npm run dist` yields a different hash and
   # only the uploaded file's is meaningful:
   #   curl -sL <url> | shasum -a 256
-  sha256 "6616b0f72c2e5f18c14cbed582676c1fbb71d43f330d5a3d8687d7c191ef1ef5"
+  sha256 "c85589392fc1d066978538080bb9e60412e6a47c41d2da60414c68a02164ad83"
 
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
   # anonymously, so a private repo's release asset returns 404 for everyone
