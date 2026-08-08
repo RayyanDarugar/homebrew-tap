@@ -1,10 +1,10 @@
 cask "agent-overlay" do
-  version "1.0.2"
+  version "1.1.0"
   # Taken from the PUBLISHED asset, not from a local build. Electron output is
   # not byte-reproducible, so every `npm run dist` yields a different hash and
   # only the uploaded file's is meaningful:
   #   curl -sL <url> | shasum -a 256
-  sha256 "c85589392fc1d066978538080bb9e60412e6a47c41d2da60414c68a02164ad83"
+  sha256 "a3bf4d46ad340e660f62e35fc146c842b5b772ed1d47aaed2c6873bf3fb6c135"
 
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
   # anonymously, so a private repo's release asset returns 404 for everyone
@@ -41,6 +41,7 @@ cask "agent-overlay" do
   # it would be the single most destructive thing this package could do, and the
   # hooks are inert without the app anyway — they append to a log nothing reads.
   zap trash: [
+    "~/Library/Application Support/agent-overlay",
     "~/Library/Application Support/prototype",
     "~/.attention-exchange",
   ]
@@ -58,5 +59,9 @@ cask "agent-overlay" do
     On first launch it asks for Screen Recording. Nothing is recorded — it is
     the only macOS permission for "what does this region of the screen look
     like", which is how it finds space that is actually blank.
+    This version can answer Claude Code's permission prompts. When an agent
+    asks to run a tool, the panel offers Allow and Deny. Your terminal prompt
+    still works exactly as before; whichever you answer first wins.
+
   EOS
 end
