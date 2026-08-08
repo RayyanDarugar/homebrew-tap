@@ -1,10 +1,10 @@
 cask "agent-overlay" do
-  version "1.1.0"
+  version "1.1.1"
   # Taken from the PUBLISHED asset, not from a local build. Electron output is
   # not byte-reproducible, so every `npm run dist` yields a different hash and
   # only the uploaded file's is meaningful:
   #   curl -sL <url> | shasum -a 256
-  sha256 "a3bf4d46ad340e660f62e35fc146c842b5b772ed1d47aaed2c6873bf3fb6c135"
+  sha256 "3a7608aecb447e88600b679967be505ebc9824c1985f3f8b92d10d2f0cbc32b9"
 
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
   # anonymously, so a private repo's release asset returns 404 for everyone
