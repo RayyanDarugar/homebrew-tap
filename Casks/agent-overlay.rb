@@ -1,10 +1,10 @@
 cask "agent-overlay" do
-  version "1.1.1"
+  version "1.1.2"
   # Taken from the PUBLISHED asset, not from a local build. Electron output is
   # not byte-reproducible, so every `npm run dist` yields a different hash and
   # only the uploaded file's is meaningful:
   #   curl -sL <url> | shasum -a 256
-  sha256 "3a7608aecb447e88600b679967be505ebc9824c1985f3f8b92d10d2f0cbc32b9"
+  sha256 "076cca96770abd3f69ca04136be32faa0a8ea2dcb95466d3396dcf1997086431"
 
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
   # anonymously, so a private repo's release asset returns 404 for everyone
@@ -47,21 +47,21 @@ cask "agent-overlay" do
   ]
 
   caveats <<~EOS
-    One more step, because agent-overlay is not notarised by Apple:
-
-      xattr -dr com.apple.quarantine "/Applications/agent-overlay.app"
-
-    Without it macOS reports the app as "damaged", which is untrue and is the
-    same message a genuinely corrupt download gives. Homebrew used to offer
-    --no-quarantine for exactly this; it was removed, and there is no
-    replacement flag, so the step has to be run by hand.
-
     On first launch it asks for Screen Recording. Nothing is recorded — it is
     the only macOS permission for "what does this region of the screen look
     like", which is how it finds space that is actually blank.
-    This version can answer Claude Code's permission prompts. When an agent
-    asks to run a tool, the panel offers Allow and Deny. Your terminal prompt
-    still works exactly as before; whichever you answer first wins.
 
+    UPGRADING FROM 1.1.1 OR EARLIER: this version is signed by Apple, which
+    changes the app's identity as far as macOS is concerned. Your existing
+    Screen Recording grant does not carry over, and the old entry can look
+    switched on while doing nothing. Open System Settings > Privacy & Security
+    > Screen Recording, select agent-overlay, remove it with the minus button,
+    then launch the app and allow it when it asks. This is a one-time step —
+    the identity is stable from now on.
+
+    The panel can answer Claude Code's permission prompts. When an agent asks
+    to run a tool, it offers Allow and Deny. Your terminal prompt still works
+    exactly as before; whichever you answer first wins.
   EOS
+
 end
