@@ -1,29 +1,32 @@
 cask "agent-overlay" do
-  version "1.2.0"
-  # Taken from the PUBLISHED asset, not from a local build. Electron output is
-  # not byte-reproducible, so every `npm run dist` yields a different hash and
-  # only the uploaded file's is meaningful:
+  version "1.2.1"
+  # Two builds now, not one. Both hashes are taken from the PUBLISHED assets,
+  # not from a local build:
   #   curl -sL <url> | shasum -a 256
-  sha256 "3c184e1c4e4e8fb67ce4468de6d1755db5e26c9664feaef3f4f449f9fc994b7a"
-
+  #
+  # The URL and sha live inside on_arm/on_intel rather than at the top level
+  # because they genuinely differ per architecture -- a single sha256 would
+  # fail the checksum for whichever Mac did not happen to build it.
+  #
   # The PUBLIC releases repo, not the private source repo. Homebrew downloads
   # anonymously, so a private repo's release asset returns 404 for everyone
-  # except the account that owns it — the cask would work only on the machine
-  # that published it.
+  # except the account that owns it.
   #
   # The tag is prefixed because that repo already holds v1.0.0 for the previous
   # product (Attention Instrument). Two products, one release repo, so the tag
   # has to say which.
-  url "https://github.com/RayyanDarugar/attentionexchange-releases/releases/download/agent-overlay-v#{version}/agent-overlay-#{version}-arm64.dmg"
+  on_arm do
+    sha256 "bafdc1e0d446d35f14c5a793eaec564043a6ecf47522dcf2ba1b4f3b1145a614"
+    url "https://github.com/RayyanDarugar/attentionexchange-releases/releases/download/agent-overlay-v#{version}/agent-overlay-#{version}-arm64.dmg"
+  end
+  on_intel do
+    sha256 "379a277a932fe46cababfe458083f9cd179cb5a55e8e90636c11170c9eb7d1bc"
+    url "https://github.com/RayyanDarugar/attentionexchange-releases/releases/download/agent-overlay-v#{version}/agent-overlay-#{version}-x64.dmg"
+  end
   name "agent-overlay"
   desc "Shows what your Claude Code sessions are doing, in blank space on screen"
   homepage "https://github.com/RayyanDarugar/attentionexchange-releases"
 
-  # Apple Silicon only: the build is arm64, and the Swift helpers that read
-  # window geometry are compiled for it. An Intel Mac fails at launch in a way
-  # a non-technical person cannot describe back to you, so it is refused here
-  # with an explanation instead.
-  depends_on arch: :arm64
   # The bare symbol already means "or newer" — the DSL parses it with a ">="
   # comparator by default, which is why the string form is both redundant and
   # deprecated.
@@ -51,13 +54,13 @@ cask "agent-overlay" do
     the only macOS permission for "what does this region of the screen look
     like", which is how it finds space that is actually blank.
 
-    UPGRADING FROM 1.1.1 OR EARLIER: this version is signed by Apple, which
-    changes the app's identity as far as macOS is concerned. Your existing
-    Screen Recording grant does not carry over, and the old entry can look
-    switched on while doing nothing. Open System Settings > Privacy & Security
-    > Screen Recording, select agent-overlay, remove it with the minus button,
-    then launch the app and allow it when it asks. This is a one-time step —
-    the identity is stable from now on.
+ALREADY HAD 1.2.0 OR EARLIER? Two things. Its helper programs were
+    built requiring macOS 26 by mistake, so on anything older the panel never
+    appeared at all — that is fixed here, and it was never anything you did.
+    And if you first installed before the app was signed by Apple, macOS sees
+    a new identity: open System Settings > Privacy & Security > Screen
+    Recording, select agent-overlay, remove it with the minus button, then
+    launch and allow it when it asks. One time only.
 
     The panel can answer Claude Code's permission prompts. When an agent asks
     to run a tool, it offers Allow and Deny. Your terminal prompt still works
